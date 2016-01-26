@@ -32,13 +32,18 @@ var messages = [];
       }
     });
   },
+
   fetch: function(querySelector) {
+    var that = this;
     $.ajax({
       url: 'https://api.parse.com/1/classes/chatterbox' + querySelector,
       type: 'GET',
       contentType: 'application/json',
       success: function (data) {
         console.log('chatterbox: Message sent. Data: ', data);
+        for (var i = 0; i < data.results.length; i++) {
+          that.addMessage(data.results[i].text);
+        }
       },
       error: function (data) {
         console.error('chatterbox: Failed to send message. Error: ', data);
@@ -49,7 +54,7 @@ var messages = [];
     $('#chats').empty();
   },
   addMessage: function(message) {
-    $('#chats').append('<li class="username">' + message + '</li>');
+    $('#chats').prepend('<li class="username">' + message + '</li>');
     $('.username').on('click', function() {
       app.addFriend();
     });
