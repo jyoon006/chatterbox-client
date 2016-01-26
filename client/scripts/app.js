@@ -1,4 +1,10 @@
-var app = {
+
+
+
+
+ var messages = [];
+
+ var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
   init: function() {},
   send: function(message) {
@@ -45,26 +51,31 @@ var app = {
 
   },
   handleSubmit: function() {
+    // var userText = $('#messageText').val();
+    //?message=qwerwqerer&username=asdf
     
   }
-
 };
 
 
-
-// var message = {
-//   username: 'kelly/Jisoo',
-//   text: 'hello',
-// };
-$(document).ready(function() {
-  $('#send').on("submit", function(e) {
-    console.log(e);
+ $(document).ready(function() {
+  $('#send').on('submit', function() {
     app.handleSubmit();
-  })
+  });
 });
 
+var inputData = window.location.search.split("&");
+var userMessage = inputData[0].split("=")[1];
+var userID = inputData[1].split("=")[1];
+
+console.log('userMessage: ' + userMessage, 'userID: ' + userID);
 
 
+// var message = {
+//   username: 'shawndrost',
+//   text: 'trololo',
+//   roomname: '4chan'
+// };
 
 
 // $.ajax({
