@@ -1,12 +1,23 @@
+var app;
+$(document).ready(function() {
+var currentTime = new Date().toISOString(); //GET data from current time
 
+var messages = [];
+//?message=qwerwqerer&username=asdf
 
-
-
- var messages = [];
-
- var app = {
+ app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
-  init: function() {},
+  init: function() {
+    var userID = window.location.search.split("=")[1];
+    var mostRecentMessage = '?order=-createdAt';
+    this.fetch(mostRecentMessage);
+    $('form').on('submit', function(e) {
+      var userMessage = $('#messageText').val();
+      var roomName = $('#roomSelect :selected').text();
+      e.preventDefault();
+      app.handleSubmit(userID, userMessage, roomName);
+    });
+  },
   send: function(message) {
     $.ajax({
       url: 'https://api.parse.com/1/classes/chatterbox',
@@ -21,9 +32,9 @@
       }
     });
   },
-  fetch: function() {
+  fetch: function(querySelector) {
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: 'https://api.parse.com/1/classes/chatterbox' + querySelector,
       type: 'GET',
       contentType: 'application/json',
       success: function (data) {
@@ -42,7 +53,7 @@
     $('.username').on('click', function() {
       app.addFriend();
     });
-    
+
   },
   addRoom: function(room) {
     $('#roomSelect').append('<option value="room">' + room + '</option>');
@@ -50,32 +61,28 @@
   addFriend: function() {
 
   },
-  handleSubmit: function() {
-    // var userText = $('#messageText').val();
-    //?message=qwerwqerer&username=asdf
-    
+  handleSubmit: function(userID, userMessage, roomName) {
+  // var userText = $('#messageText').val();
+    var message = {
+      username: userID,
+      text: userMessage,
+      roomname: roomName
+    };
+    console.log(message);
   }
 };
 
 
- $(document).ready(function() {
-  $('#send').on('submit', function() {
-    app.handleSubmit();
-  });
+app.init();
+
+
+// console.log('userMessage: ' + userMessage, 'userID: ' + userID);
 });
 
-var inputData = window.location.search.split("&");
-var userMessage = inputData[0].split("=")[1];
-var userID = inputData[1].split("=")[1];
-
-console.log('userMessage: ' + userMessage, 'userID: ' + userID);
 
 
-// var message = {
-//   username: 'shawndrost',
-//   text: 'trololo',
-//   roomname: '4chan'
-// };
+
+
 
 
 // $.ajax({
@@ -95,4 +102,20 @@ console.log('userMessage: ' + userMessage, 'userID: ' + userID);
 // $.get('https://api.parse.com/1/classes/chatterbox', function(data) {
 //   data.results.push(message);
 //   console.log(data.results);
+// });
+
+//where={"score":{"$in":[1,3,5,7,9]}}
+
+// var filterUsername = '{"roomname":{"$in":['4chan']}}';
+// var mostRecentMessage = 'order=-createdAt';
+// var recentMessagesFilter = '{"updatedAt":{"$gte": "' + currentTime + '"}}'
+
+//find most recent messages from server
+// $.get('https://api.parse.com/1/classes/chatterbox?' + mostRecentMessage, function(data) {
+//   console.log(data);
+// });
+
+
+// $.get('https://api.parse.com/1/classes/chatterbox?where=' + recentMessagesFilter, function(data) {
+//   console.log(data);
 // });
