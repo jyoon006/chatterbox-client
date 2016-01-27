@@ -16,21 +16,19 @@
     <div id="main">
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
-      <div class="room">
-        <select name="rooms" id="roomSelect">
-          <option value="Room1">Room 1</option>
-          <option value="Room2">Room 2</option>
-          <option value="Room3">Romm 3</option>
+      <div class="rooms">
+        Room:
+        <select id="roomSelect">
         </select>
       </div>
       <!-- <form method="post"> -->
-      <form>
+      <form action="#" id="send" method="post">
         <input type="text" name="message" value="message" id="messageText">
-        <input type="submit" id="send" class="submit">
+        <input type="submit" id="submit" class="submit">
       </form>
-      <div class="chats" id="chats">
-        
-      </div>
+      
+      <div class="chat" id="chat"></div>
+      
     </div>
   </body>
 </html>
