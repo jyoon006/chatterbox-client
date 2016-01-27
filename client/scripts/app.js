@@ -1,19 +1,15 @@
 var app;
 $(document).ready(function() {
-var currentTime = new Date().toISOString(); //GET data from current time
-
-var messages = [];
-
-//?message=qwerwqerer&username=asdf
 
 
 
-// var roomName;
-var userMessage;
+
+
  app = {
- server: 'https://api.parse.com/1/classes/chatterbox',
- username: 'anonymous',
- roomname: 'lobby',
+   server: 'https://api.parse.com/1/classes/chatterbox',
+   username: 'anonymous',
+   roomname: 'lobby',
+   friends: {},
 
   init: function() {
     app.username = window.location.search.split("=")[1];
@@ -33,6 +29,7 @@ var userMessage;
       app.handleSubmit();
     });
     $('#roomSelect').on('change', app.saveRoom);
+    $('#main').on('click', '.username', app.addFriend);
     setInterval(app.fetch, 10000);
   },
   send: function(message) {
@@ -107,11 +104,24 @@ var userMessage;
     
     
      if (data.roomname === app.roomname) {
+      
       var $chat = $('<div class="chat"/>')
-        $username.text(data.username+': ').attr('data-username', data.username).attr('data-roomname', data.roomname).appendTo($chat);
-      var $message = $('<br><span/>');
+      
+      var $username = $('<span class="username"/>');
+      $username.text(data.username+': ').attr('data-username', data.username).attr('data-roomname', data.roomname).appendTo($chat);
+     
+
+    
+    var $message = $('<br><span/>');
+    
         $message.text(data.text).appendTo($chat); 
-        app.$chats.append($chat);
+
+    app.$chats.append($chat);
+    
+    // $('.username').on('click', function() {
+    //   app.addFriend();
+    // });
+    }
   },
   addRoom: function(roomname) {
     var $option = $('<option/>').val(roomname).text(roomname);
@@ -119,7 +129,19 @@ var userMessage;
     app.$roomSelect.append($option);
      
   },
-  addFriend: function() {
+  addFriend: function(evt) {
+    var username = $(evt.currentTarget).attr('data-username');
+      if (username !== undefined) {
+        console.log('chatterbox: Adding %s as a friend', username);
+
+        // Store as a friend
+        app.friends[username] = true;
+
+        // Bold all previous messages
+        // Escape the username in case it contains a quote
+        var selector = '[data-username="'+username.replace(/"/g, '\\\"')+'"]';
+        var $usernames = $(selector).addClass('friend');
+      }
 
   },
   saveRoom: function(evt) {
